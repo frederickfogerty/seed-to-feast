@@ -3,7 +3,7 @@ import {
   Sprout,
   Hammer,
   CalendarDays,
-  Basket,
+  ShoppingBasket,
   Ruler,
   Clock,
   Leaf,
@@ -246,7 +246,7 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
       </Section>
 
       <Section
-        icon={<Basket className="h-6 w-6" />}
+        icon={<ShoppingBasket className="h-6 w-6" />}
         title="What to harvest, and when"
         subtitle="First pickings from the earliest sowing of each crop."
       >
