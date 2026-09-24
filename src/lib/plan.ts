@@ -139,7 +139,7 @@ export function buildPlan(input: PlannerInput, year: number): GardenPlan {
 
   const cropPlans: CropPlan[] = chosen.map((crop, i) => {
     const wantsCover = crop.greenhouseOnly || (input.greenhouse && crop.id === "tomato");
-    const share = weights[i] / weightSum;
+    const share = (weights[i] ?? 1) / weightSum;
     let area: number;
     let underCover = false;
     if (wantsCover && coverLeft > 0.5) {
@@ -285,7 +285,7 @@ function buildCalendar(
     let w = week;
     while (w > 52) w -= 52;
     while (w < 1) w += 52;
-    tasks.push({ week: w, date: weekToDate(w, year), kind, text, cropId });
+    tasks.push({ week: w, date: weekToDate(w, year), kind, text, cropId: cropId ?? "" });
   };
 
   // Bed preparation, a few weeks before the first sowing.
@@ -352,5 +352,5 @@ export function tasksByWeek(tasks: WeekTask[]): { week: number; date: Date; task
   }
   return [...map.entries()]
     .sort((a, b) => a[0] - b[0])
-    .map(([week, list]) => ({ week, date: list[0].date, tasks: list }));
+    .map(([week, list]) => ({ week, date: list[0]?.date ?? weekToDate(week, new Date().getUTCFullYear()), tasks: list }));
 }
