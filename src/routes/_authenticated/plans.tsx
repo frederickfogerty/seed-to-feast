@@ -6,6 +6,7 @@ import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AccountControls } from "@/components/AccountControls";
 import { deletePlan, getProfile, listPlans, updateProfile, type Profile } from "@/lib/plans-api";
 
 export const Route = createFileRoute("/_authenticated/plans")({
@@ -137,6 +138,7 @@ function PlansPage() {
       )}
 
       <ProfileCard />
+      <AccountControls />
     </main>
   );
 }
