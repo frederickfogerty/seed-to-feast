@@ -14,7 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      garden_plans: {
+        Row: {
+          created_at: string
+          id: string
+          input: Json
+          name: string
+          notes: string | null
+          season_year: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          input: Json
+          name: string
+          notes?: string | null
+          season_year: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          input?: Json
+          name?: string
+          notes?: string | null
+          season_year?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          climate: string
+          created_at: string
+          display_name: string | null
+          hemisphere: string
+          id: string
+          location_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          climate?: string
+          created_at?: string
+          display_name?: string | null
+          hemisphere?: string
+          id: string
+          location_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          climate?: string
+          created_at?: string
+          display_name?: string | null
+          hemisphere?: string
+          id?: string
+          location_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
