@@ -36,6 +36,8 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>): { edit?: string } =>
+    typeof s.edit === "string" ? { edit: s.edit } : {},
   component: Index,
 });
 
@@ -86,29 +88,114 @@ function Index() {
   const [experience, setExperience] = useState<Experience>("none");
   const [household, setHousehold] = useState(2);
 
+  const { edit } = Route.useSearch();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [editing, setEditing] = useState<SavedPlan | null>(null);
+  const [planName, setPlanName] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const applyInput = (i: PlannerInput) => {
+    setCategories(i.categories);
+    setDislikes(i.dislikes);
+    setSpaceM2(i.spaceM2);
+    setGreenhouse(i.greenhouse);
+    setGreenhouseM2(i.greenhouseM2);
+    setLocationName(i.locationName);
+    setHemisphere(i.hemisphere);
+    setClimate(i.climate);
+    setExperience(i.experience);
+    setHousehold(i.household);
+  };
+
+  useEffect(() => {
+    if (!user) return;
+    if (edit) {
+      getPlan(edit)
+        .then((p) => {
+          setEditing(p);
+          setPlanName(p.name);
+          applyInput(p.input);
+        })
+        .catch(() => toast.error("Couldn't load that plan"));
+    } else {
+      getProfile().then((p) => {
+        if (!p) return;
+        if (p.location_name) setLocationName(p.location_name);
+        if (p.hemisphere === "north" || p.hemisphere === "south") setHemisphere(p.hemisphere);
+        if (["cool", "temperate", "warm"].includes(p.climate)) setClimate(p.climate as Climate);
+      });
+    }
+  }, [user, edit]);
+
   const toggle = <T,>(list: T[], value: T, set: (v: T[]) => void) =>
     set(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
 
+  const currentInput = (): PlannerInput => ({
+    categories,
+    dislikes,
+    spaceM2,
+    hemisphere,
+    climate,
+    locationName,
+    greenhouse,
+    greenhouseM2,
+    experience,
+    household,
+  });
+
   const generate = () => {
-    const input: PlannerInput = {
-      categories,
-      dislikes,
-      spaceM2,
-      hemisphere,
-      climate,
-      locationName,
-      greenhouse,
-      greenhouseM2,
-      experience,
-      household,
-    };
-    setPlan(buildPlan(input, new Date().getUTCFullYear()));
+    const year = editing?.season_year ?? new Date().getUTCFullYear();
+    setPlan(buildPlan(currentInput(), year));
+    if (!planName) setPlanName(locationName ? `${locationName} garden` : "My garden");
     if (typeof window !== "undefined") window.scrollTo({ top: 0 });
+  };
+
+  const save = async () => {
+    if (!plan) return;
+    setSaving(true);
+    try {
+      const id = await savePlan({
+        id: editing?.id,
+        name: planName.trim() || "My garden",
+        season_year: plan.year,
+        input: currentInput(),
+        notes: editing?.notes ?? null,
+      });
+      toast.success(editing ? "Plan updated" : "Plan saved");
+      navigate({ to: "/plans/$id", params: { id } });
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (plan) {
     return (
-      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+      <main className="mx-auto max-w-5xl space-y-6 px-4 py-10 sm:px-6">
+        <div className="paper flex flex-wrap items-end gap-3 rounded-xl p-5">
+          {user ? (
+            <>
+              <div className="min-w-[220px] flex-1">
+                <Label htmlFor="pname">Plan name</Label>
+                <Input id="pname" className="mt-2" maxLength={80} value={planName} onChange={(e) => setPlanName(e.target.value)} />
+              </div>
+              <Button onClick={save} disabled={saving}>
+                {editing ? "Update saved plan" : `Save plan for ${plan.year}`}
+              </Button>
+            </>
+          ) : (
+            <>
+              <p className="flex-1 text-sm text-muted-foreground">
+                Want to keep this plan and come back to it next season?
+              </p>
+              <Button asChild>
+                <Link to="/auth">Sign in to save</Link>
+              </Button>
+            </>
+          )}
+        </div>
         <PlanView plan={plan} onRestart={() => setPlan(null)} />
       </main>
     );
