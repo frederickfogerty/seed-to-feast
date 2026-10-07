@@ -31,7 +31,7 @@ export async function getPlan(id: string): Promise<SavedPlan> {
 }
 
 export async function savePlan(p: {
-  id?: string;
+  id?: string | undefined;
   name: string;
   season_year: number;
   input: PlannerInput;

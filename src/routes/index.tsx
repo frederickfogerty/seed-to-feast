@@ -40,7 +40,7 @@ export const Route = createFileRoute("/")({
     ],
   }),
   validateSearch: (s: Record<string, unknown>): { edit?: string } =>
-    typeof s.edit === "string" ? { edit: s.edit } : {},
+    typeof s['edit'] === "string" ? { edit: s['edit'] } : {},
   component: Index,
 });
 
