@@ -1,5 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { getPlan, getProfile, savePlan, type SavedPlan } from "@/lib/plans-api";
 import { ArrowLeft, ArrowRight, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -94,6 +97,7 @@ function Index() {
   const [editing, setEditing] = useState<SavedPlan | null>(null);
   const [planName, setPlanName] = useState("");
   const [saving, setSaving] = useState(false);
+  const [planYear, setPlanYear] = useState(2026);
 
   const applyInput = (i: PlannerInput) => {
     setCategories(i.categories);
@@ -146,6 +150,7 @@ function Index() {
 
   const generate = () => {
     const year = editing?.season_year ?? new Date().getUTCFullYear();
+    setPlanYear(year);
     setPlan(buildPlan(currentInput(), year));
     if (!planName) setPlanName(locationName ? `${locationName} garden` : "My garden");
     if (typeof window !== "undefined") window.scrollTo({ top: 0 });
@@ -158,7 +163,7 @@ function Index() {
       const id = await savePlan({
         id: editing?.id,
         name: planName.trim() || "My garden",
-        season_year: plan.year,
+        season_year: planYear,
         input: currentInput(),
         notes: editing?.notes ?? null,
       });
@@ -182,7 +187,7 @@ function Index() {
                 <Input id="pname" className="mt-2" maxLength={80} value={planName} onChange={(e) => setPlanName(e.target.value)} />
               </div>
               <Button onClick={save} disabled={saving}>
-                {editing ? "Update saved plan" : `Save plan for ${plan.year}`}
+                {editing ? "Update saved plan" : `Save plan for ${planYear}`}
               </Button>
             </>
           ) : (
