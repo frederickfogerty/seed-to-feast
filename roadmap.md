@@ -1,0 +1,2 @@
+- [x] Accounts: save/revisit/update plans across seasons
+- [x] GDPR sign-up: email confirmation required + consent checkbox
