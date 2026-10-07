@@ -28,6 +28,7 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  const [consent, setConsent] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -45,7 +46,7 @@ function AuthPage() {
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: window.location.origin, data: { display_name: name } },
+        options: { emailRedirectTo: window.location.origin, data: { display_name: name, privacy_consent_at: new Date().toISOString() } },
       });
       if (error) toast.error(error.message);
       else setSent(true);
@@ -80,7 +81,15 @@ function AuthPage() {
               <Label htmlFor="pw">Password</Label>
               <Input id="pw" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2" />
             </div>
-            <Button type="submit" className="w-full" disabled={busy}>
+            {mode === "up" && (
+              <label className="flex items-start gap-2 text-sm text-muted-foreground">
+                <input type="checkbox" required checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1" />
+                <span>
+                  I agree that Plot &amp; Plan stores my email, name and garden plans to provide this service. I can delete my plans at any time. Registration completes once I confirm my email address.
+                </span>
+              </label>
+            )}
+            <Button type="submit" className="w-full" disabled={busy || (mode === "up" && !consent)}>
               {mode === "in" ? "Sign in" : "Create account"}
             </Button>
           </form>
