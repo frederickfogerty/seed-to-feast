@@ -18,6 +18,9 @@ import {
   type GardenPlan,
   type Hemisphere,
   type PlannerInput,
+  EXTRA_LABELS,
+  EXTRA_CROPS,
+  type Extra,
 } from "@/lib/plan";
 
 export const Route = createFileRoute("/")({
@@ -82,6 +85,7 @@ function Index() {
     "herb",
   ]);
   const [dislikes, setDislikes] = useState<string[]>([]);
+  const [extras, setExtras] = useState<Extra[]>([]);
   const [spaceM2, setSpaceM2] = useState(20);
   const [greenhouse, setGreenhouse] = useState(false);
   const [greenhouseM2, setGreenhouseM2] = useState(6);
@@ -102,6 +106,7 @@ function Index() {
   const applyInput = (i: PlannerInput) => {
     setCategories(i.categories);
     setDislikes(i.dislikes);
+    setExtras(i.extras ?? []);
     setSpaceM2(i.spaceM2);
     setGreenhouse(i.greenhouse);
     setGreenhouseM2(i.greenhouseM2);
@@ -138,6 +143,7 @@ function Index() {
   const currentInput = (): PlannerInput => ({
     categories,
     dislikes,
+    extras,
     spaceM2,
     hemisphere,
     climate,
@@ -244,7 +250,7 @@ function Index() {
                 Pick the groups worth the space in your kitchen.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                {(Object.keys(CATEGORY_LABELS) as CropCategory[]).map((c) => (
+                {(Object.keys(CATEGORY_LABELS) as CropCategory[]).filter((c) => c !== "flower").map((c) => (
                   <Chip
                     key={c}
                     active={categories.includes(c)}
@@ -256,9 +262,20 @@ function Index() {
               </div>
             </div>
             <div>
+              <h3 className="text-lg">Anything you would really like to grow?</h3>
+              <p className="mt-1 text-sm text-muted-foreground">These always make it into your plan.</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {(Object.keys(EXTRA_LABELS) as Extra[]).map((e) => (
+                  <Chip key={e} active={extras.includes(e)} onClick={() => toggle(extras, e, setExtras)}>
+                    {EXTRA_LABELS[e]}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <div>
               <h3 className="text-lg">Anything you'd rather not grow?</h3>
               <div className="mt-3 flex flex-wrap gap-2">
-                {CROPS.filter((c) => categories.includes(c.category)).map((c) => (
+                {CROPS.filter((c) => categories.includes(c.category) && !Object.values(EXTRA_CROPS).flat().includes(c.id)).map((c) => (
                   <Chip
                     key={c.id}
                     active={dislikes.includes(c.id)}

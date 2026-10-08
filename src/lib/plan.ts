@@ -15,7 +15,19 @@ export interface PlannerInput {
   greenhouseM2: number;
   experience: Experience;
   household: number;
+  /** must-have extras, always included */
+  extras?: Extra[];
 }
+
+export type Extra = "pumpkin" | "sweetcorn" | "flowers";
+export const EXTRA_LABELS: Record<Extra, string> = { pumpkin: "Pumpkin", sweetcorn: "Sweetcorn", flowers: "Flowers" };
+export const EXTRA_CROPS: Record<Extra, string[]> = {
+  pumpkin: ["pumpkin"],
+  sweetcorn: ["sweetcorn"],
+  flowers: ["sunflower", "marigold", "nasturtium"],
+};
+const EXTRA_MIN_PLANTS: Record<string, number> = { pumpkin: 2, sweetcorn: 9, sunflower: 3, marigold: 6, nasturtium: 3 };
+const EXTRA_IDS = new Set(Object.values(EXTRA_CROPS).flat());
 
 export interface CropPlan {
   crop: Crop;
@@ -104,7 +116,10 @@ function seasonOfWeek(week: number, hemisphere: Hemisphere): string {
 export function buildPlan(input: PlannerInput, year: number): GardenPlan {
   const maxDifficulty = EXPERIENCE_MAX_DIFFICULTY[input.experience];
 
+  const mustIds = new Set((input.extras ?? []).flatMap((e) => EXTRA_CROPS[e] ?? []));
+  const must = CROPS.filter((c) => mustIds.has(c.id));
   const eligible = CROPS.filter((c) => {
+    if (EXTRA_IDS.has(c.id)) return false;
     if (input.dislikes.includes(c.id)) return false;
     if (!input.categories.includes(c.category)) return false;
     if (c.difficulty > maxDifficulty) return false;
@@ -128,7 +143,7 @@ export function buildPlan(input: PlannerInput, year: number): GardenPlan {
     scored.length,
     Math.max(3, Math.round(growingAreaM2 / 2) + (input.experience === "none" ? 0 : 3)),
   );
-  const chosen = scored.slice(0, capacity);
+  const chosen = [...must, ...scored.slice(0, Math.max(2, capacity - must.length))];
 
   let outdoorLeft = growingAreaM2;
   let coverLeft = coverArea;
@@ -154,7 +169,13 @@ export function buildPlan(input: PlannerInput, year: number): GardenPlan {
     area = Math.round(area * 10) / 10;
 
     const perPlantM2 = (crop.spacingCm / 100) ** 2;
-    const plants = Math.max(1, Math.round((area / perPlantM2) * Math.min(1.4, householdFactor)));
+    let plants = Math.max(1, Math.round((area / perPlantM2) * Math.min(1.4, householdFactor)));
+    const minPlants = mustIds.has(crop.id) ? EXTRA_MIN_PLANTS[crop.id] ?? 1 : 1;
+    if (plants < minPlants) {
+      // Give must-haves a sensible minimum, capped at what fits in the whole plot.
+      plants = Math.max(1, Math.min(minPlants, Math.floor(growingAreaM2 / perPlantM2)));
+      area = Math.round(plants * perPlantM2 * 10) / 10;
+    }
     const seeds = Math.ceil(plants * crop.seedFactor);
     const packets = Math.max(1, Math.ceil(seeds / crop.packetSeeds));
     return {
@@ -324,10 +345,11 @@ function buildCalendar(
 
         const hStart = sowWeek + crop.weeksToHarvest;
         const hEnd = hStart + crop.harvestWeeks;
-        add(hStart, "harvest", `Start harvesting ${crop.name}. ${crop.tip}`, crop.id);
+        const isFlower = crop.category === "flower";
+        add(hStart, "harvest", `${isFlower ? "First flowers on the" : "Start harvesting"} ${crop.name}. ${crop.tip}`, crop.id);
         if (offset === 0) {
           harvests.push({
-            cropName: crop.name,
+            cropName: crop.category === "flower" ? `${crop.name} (flowering)` : crop.name,
             startWeek: ((hStart - 1) % 52) + 1,
             endWeek: ((hEnd - 1) % 52) + 1,
             startDate: weekToDate(((hStart - 1) % 52) + 1, year),
