@@ -18,6 +18,9 @@ import {
   type GardenPlan,
   type Hemisphere,
   type PlannerInput,
+  EXTRA_LABELS,
+  EXTRA_CROPS,
+  type Extra,
 } from "@/lib/plan";
 
 export const Route = createFileRoute("/")({
@@ -272,7 +275,7 @@ function Index() {
             <div>
               <h3 className="text-lg">Anything you'd rather not grow?</h3>
               <div className="mt-3 flex flex-wrap gap-2">
-                {CROPS.filter((c) => categories.includes(c.category)).map((c) => (
+                {CROPS.filter((c) => categories.includes(c.category) && !Object.values(EXTRA_CROPS).flat().includes(c.id)).map((c) => (
                   <Chip
                     key={c.id}
                     active={dislikes.includes(c.id)}
