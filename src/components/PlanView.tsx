@@ -116,7 +116,7 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
                   <td className="py-3 pr-3">{c.plants}</td>
                   <td className="py-3 pr-3">{c.seeds}</td>
                   <td className="py-3 pr-3">{c.packets}</td>
-                  <td className="py-3">{c.estimatedYieldKg} kg</td>
+                  <td className="py-3">{c.crop.category === "flower" ? "flowering" : `${c.estimatedYieldKg} kg`}</td>
                 </tr>
               ))}
             </tbody>
