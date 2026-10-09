@@ -5,8 +5,7 @@ export type CropCategory =
   | "legume"
   | "brassica"
   | "allium"
-  | "herb"
-  | "flower";
+  | "herb";
 
 export const CATEGORY_LABELS: Record<CropCategory, string> = {
   leafy: "Salads & leaves",
@@ -16,7 +15,6 @@ export const CATEGORY_LABELS: Record<CropCategory, string> = {
   brassica: "Cabbage family",
   allium: "Onions & garlic",
   herb: "Herbs",
-  flower: "Flowers",
 };
 
 export type Fertility = "light" | "medium" | "hungry";
@@ -522,35 +520,5 @@ export const CROPS: Crop[] = [
       [2, 6],
     ],
     tip: "Mizuna, mustards and lamb's lettuce crop right through a cold greenhouse.",
-  },
-  {
-    id: "pumpkin", name: "Pumpkins", category: "fruiting", difficulty: 2, spacingCm: 150, seedFactor: 1.5, packetSeeds: 10,
-    weeksToHarvest: 18, harvestWeeks: 4, fertility: "hungry", yieldPerPlantKg: 6,
-    sowOutside: [[21, 23]], sowUnderCover: [[16, 19]],
-    tip: "Harvest before the first frost and leave in the sun for a week so the skin hardens for storing.",
-  },
-  {
-    id: "sweetcorn", name: "Sweetcorn", category: "fruiting", difficulty: 2, spacingCm: 40, seedFactor: 1.4, packetSeeds: 30,
-    weeksToHarvest: 16, harvestWeeks: 4, fertility: "hungry", yieldPerPlantKg: 0.5,
-    sowOutside: [[21, 23]], sowUnderCover: [[15, 18]],
-    tip: "Plant in a square block, not a row, so the wind pollinates it. Ripe when the tassels turn brown.",
-  },
-  {
-    id: "sunflower", name: "Sunflowers", category: "flower", difficulty: 1, spacingCm: 45, seedFactor: 1.5, packetSeeds: 30,
-    weeksToHarvest: 12, harvestWeeks: 8, fertility: "medium", yieldPerPlantKg: 0,
-    sowOutside: [[17, 22]], sowUnderCover: [[14, 16]],
-    tip: "Stake tall varieties. Leave the heads in autumn for the birds.",
-  },
-  {
-    id: "marigold", name: "French marigolds", category: "flower", difficulty: 1, spacingCm: 25, seedFactor: 1.5, packetSeeds: 100,
-    weeksToHarvest: 10, harvestWeeks: 16, fertility: "light", yieldPerPlantKg: 0,
-    sowOutside: [[20, 23]], sowUnderCover: [[13, 17]],
-    tip: "Dot them between tomatoes and beans — they draw in hoverflies that eat aphids.",
-  },
-  {
-    id: "nasturtium", name: "Nasturtiums", category: "flower", difficulty: 1, spacingCm: 30, seedFactor: 1.3, packetSeeds: 25,
-    weeksToHarvest: 8, harvestWeeks: 16, fertility: "light", yieldPerPlantKg: 0,
-    sowOutside: [[18, 24]], sowUnderCover: [[14, 17]],
-    tip: "Poor soil means more flowers. Lures blackfly and caterpillars away from beans and cabbages.",
   },
 ];
