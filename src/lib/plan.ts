@@ -15,6 +15,8 @@ export interface PlannerInput {
   greenhouseM2: number;
   experience: Experience;
   household: number;
+  /** 0–100: share of the outdoor growing area built as raised beds; the rest is in-ground. */
+  raisedBedPercent: number;
 }
 
 export interface CropPlan {
@@ -56,6 +58,8 @@ export interface GardenPlan {
 
 export interface BedPlan {
   bedCount: number;
+  raisedBedCount: number;
+  inGroundBedCount: number;
   bedWidthM: number;
   bedLengthM: number;
   pathWidthCm: number;
