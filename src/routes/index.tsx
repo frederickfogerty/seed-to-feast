@@ -85,6 +85,7 @@ function Index() {
   const [climate, setClimate] = useState<Climate>("temperate");
   const [experience, setExperience] = useState<Experience>("none");
   const [household, setHousehold] = useState(2);
+  const [raisedPct, setRaisedPct] = useState(60);
 
   const toggle = <T,>(list: T[], value: T, set: (v: T[]) => void) =>
     set(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
@@ -101,6 +102,7 @@ function Index() {
       greenhouseM2,
       experience,
       household,
+      raisedBedPercent: raisedPct,
     };
     setPlan(buildPlan(input, new Date().getUTCFullYear()));
     if (typeof window !== "undefined") window.scrollTo({ top: 0 });
