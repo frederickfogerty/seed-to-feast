@@ -85,6 +85,7 @@ function Index() {
   const [climate, setClimate] = useState<Climate>("temperate");
   const [experience, setExperience] = useState<Experience>("none");
   const [household, setHousehold] = useState(2);
+  const [raisedPct, setRaisedPct] = useState(60);
 
   const toggle = <T,>(list: T[], value: T, set: (v: T[]) => void) =>
     set(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
@@ -101,6 +102,7 @@ function Index() {
       greenhouseM2,
       experience,
       household,
+      raisedBedPercent: raisedPct,
     };
     setPlan(buildPlan(input, new Date().getUTCFullYear()));
     if (typeof window !== "undefined") window.scrollTo({ top: 0 });
@@ -268,6 +270,29 @@ function Index() {
                   </Chip>
                 ))}
               </div>
+            </div>
+            <div>
+              <Label className="block">Raised beds or in-ground?</Label>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Raised beds warm up earlier and drain better; in-ground beds are quicker and cheaper
+                to set up. Slide to mix the two.
+              </p>
+              <div className="mt-4 flex items-center gap-4">
+                <span className="w-20 text-xs text-muted-foreground">In-ground</span>
+                <Slider
+                  value={[raisedPct]}
+                  min={0}
+                  max={100}
+                  step={5}
+                  onValueChange={(v) => setRaisedPct(v[0] ?? 60)}
+                  className="flex-1"
+                />
+                <span className="w-20 text-right text-xs text-muted-foreground">Raised</span>
+              </div>
+              <p className="mt-2 text-sm">
+                <span className="font-display text-xl">{raisedPct}%</span> raised beds ·{" "}
+                <span className="font-display text-xl">{100 - raisedPct}%</span> in-ground
+              </p>
             </div>
           </div>
         )}

@@ -127,7 +127,7 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
       <Section
         icon={<Hammer className="h-6 w-6" />}
         title="Making the beds"
-        subtitle={`${plan.beds.bedCount} bed${plan.beds.bedCount > 1 ? "s" : ""} of ${plan.beds.bedWidthM} m × ${plan.beds.bedLengthM} m with ${plan.beds.pathWidthCm} cm paths — about ${plan.beds.totalHours} hours of work in total.`}
+        subtitle={`${plan.beds.bedCount} bed${plan.beds.bedCount > 1 ? "s" : ""} of ${plan.beds.bedWidthM} m × ${plan.beds.bedLengthM} m — ${plan.beds.raisedBedCount} raised, ${plan.beds.inGroundBedCount} in-ground — with ${plan.beds.pathWidthCm} cm paths, about ${plan.beds.totalHours} hours of work in total.`}
       >
         <div className="grid gap-6 lg:grid-cols-2">
           <div>
