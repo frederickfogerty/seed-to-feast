@@ -198,8 +198,22 @@ function buildBedPlan(input: PlannerInput, crops: CropPlan[], growingAreaM2: num
   const bedWidthM = 1.2;
   const bedLengthM = Math.min(6, Math.max(2, Math.round((growingAreaM2 / bedWidthM / 2) * 2) / 2));
   const bedCount = Math.max(1, Math.round(growingAreaM2 / (bedWidthM * bedLengthM)));
+
+  const raisedShare = Math.max(0, Math.min(100, input.raisedBedPercent)) / 100;
+  const raisedBedCount = Math.round(bedCount * raisedShare);
+  const inGroundBedCount = bedCount - raisedBedCount;
+  const raisedAreaM2 = growingAreaM2 * raisedShare;
+  const inGroundAreaM2 = growingAreaM2 - raisedAreaM2;
+
   const hungry = crops.filter((c) => c.crop.fertility === "hungry").map((c) => c.crop.name);
   const light = crops.filter((c) => c.crop.fertility === "light").map((c) => c.crop.name);
+
+  const splitDesc =
+    inGroundBedCount === 0
+      ? `${bedCount} raised bed${bedCount > 1 ? "s" : ""}`
+      : raisedBedCount === 0
+        ? `${bedCount} in-ground bed${bedCount > 1 ? "s" : ""}`
+        : `${raisedBedCount} raised and ${inGroundBedCount} in-ground bed${bedCount > 1 ? "s" : ""}`;
 
   const orientation =
     input.hemisphere === "north"
@@ -210,7 +224,7 @@ function buildBedPlan(input: PlannerInput, crops: CropPlan[], growingAreaM2: num
   const steps = [
     {
       title: "Mark out and clear",
-      detail: `Peg out ${bedCount} bed${bedCount > 1 ? "s" : ""} of ${bedWidthM} m × ${bedLengthM} m with string, leaving 45 cm paths between them so you can kneel and push a barrow through. Strim or scalp the grass/weeds right down.`,
+      detail: `Peg out ${splitDesc} of ${bedWidthM} m × ${bedLengthM} m with string, leaving 45 cm paths between them so you can kneel and push a barrow through. Strim or scalp the grass/weeds right down.`,
       hours: Math.round(growingAreaM2 * 0.15 * 10) / 10,
     },
     {
@@ -219,17 +233,34 @@ function buildBedPlan(input: PlannerInput, crops: CropPlan[], growingAreaM2: num
         "Lay plain cardboard over each bed footprint, overlapping the edges by 15 cm, and soak it with water. This kills grass without digging and rots away by summer.",
       hours: Math.round(growingAreaM2 * 0.08 * 10) / 10,
     },
-    {
-      title: "Build or edge the beds",
-      detail:
-        "Either screw scaffold boards into simple rectangles, or just mound the soil into flat-topped beds with sloped sides. Edging is optional — it looks tidy and holds compost in.",
-      hours: Math.round(bedCount * 1.2 * 10) / 10,
-    },
-    {
-      title: "Fill and feed",
-      detail: `Spread 8–10 cm of compost or well-rotted manure over the cardboard — roughly ${Math.round(growingAreaM2 * 0.09 * 10) / 10} m³ in total, about ${Math.ceil(growingAreaM2 * 0.09 * 1000 / 50)} bags of 50 L compost. Rake it level; you sow straight into it.`,
-      hours: Math.round(growingAreaM2 * digHoursPerM2 * 0.4 * 10) / 10,
-    },
+    ...(raisedBedCount > 0
+      ? [
+          {
+            title: "Build the raised frames",
+            detail: `For the ${raisedBedCount} raised bed${raisedBedCount > 1 ? "s" : ""}: screw scaffold boards or sleepers into rectangles 20–30 cm deep, corner posts knocked in to hold them. No need to dig the base — the cardboard underneath does that work.`,
+            hours: Math.round(raisedBedCount * 2.5 * 10) / 10,
+          },
+          {
+            title: "Fill the raised beds",
+            detail: `Fill each frame with a 50/50 mix of topsoil and compost — roughly ${Math.round(raisedAreaM2 * 0.25 * 10) / 10} m³ for a 25 cm depth, about ${Math.ceil((raisedAreaM2 * 0.25 * 1000) / 50)} bags of 50 L compost if you're buying it in.`,
+            hours: Math.round(raisedAreaM2 * digHoursPerM2 * 0.6 * 10) / 10,
+          },
+        ]
+      : []),
+    ...(inGroundBedCount > 0
+      ? [
+          {
+            title: "Shape the in-ground beds",
+            detail: `For the ${inGroundBedCount} in-ground bed${inGroundBedCount > 1 ? "s" : ""}: mound the soil into flat-topped beds with sloped sides, or just mark the edges with a line of sand. No frames to build — the paths stay at ground level.`,
+            hours: Math.round(inGroundBedCount * 0.6 * 10) / 10,
+          },
+          {
+            title: "Feed the in-ground beds",
+            detail: `Spread 8–10 cm of compost or well-rotted manure over the cardboard — roughly ${Math.round(inGroundAreaM2 * 0.09 * 10) / 10} m³ in total, about ${Math.ceil((inGroundAreaM2 * 0.09 * 1000) / 50)} bags of 50 L compost. Rake it level; you sow straight into it.`,
+            hours: Math.round(inGroundAreaM2 * digHoursPerM2 * 0.4 * 10) / 10,
+          },
+        ]
+      : []),
     {
       title: "Set up water and paths",
       detail:
