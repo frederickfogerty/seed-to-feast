@@ -289,6 +289,9 @@ function buildBedPlan(input: PlannerInput, crops: CropPlan[], growingAreaM2: num
     "Garden line (string and two pegs) for straight rows",
     "Seed trays, module trays and a bag of peat-free seed compost",
     "Labels and a pencil",
+    ...(raisedBedCount > 0
+      ? ["Saw, drill and screws for the raised-bed frames", "Spirit level to keep the frames true"]
+      : []),
     input.greenhouse ? "Greenhouse thermometer and shade netting for July/August" : "Fleece or a cloche for late frosts",
     crops.some((c) => c.crop.category === "brassica") ? "Fine insect mesh and hoops (brassicas and carrots)" : "Slug defence of your choice",
   ];
@@ -296,6 +299,8 @@ function buildBedPlan(input: PlannerInput, crops: CropPlan[], growingAreaM2: num
   const totalHours = Math.round(steps.reduce((a, s) => a + s.hours, 0));
   return {
     bedCount,
+    raisedBedCount,
+    inGroundBedCount,
     bedWidthM,
     bedLengthM,
     pathWidthCm: 45,
