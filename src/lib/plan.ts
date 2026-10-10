@@ -128,7 +128,7 @@ export function buildPlan(input: PlannerInput, year: number): GardenPlan {
     scored.length,
     Math.max(3, Math.round(growingAreaM2 / 2) + (input.experience === "none" ? 0 : 3)),
   );
-  const chosen = scored.slice(0, Math.max(2, capacity));
+  const chosen = scored.slice(0, capacity);
 
   let outdoorLeft = growingAreaM2;
   let coverLeft = coverArea;
@@ -154,7 +154,7 @@ export function buildPlan(input: PlannerInput, year: number): GardenPlan {
     area = Math.round(area * 10) / 10;
 
     const perPlantM2 = (crop.spacingCm / 100) ** 2;
-    let plants = Math.max(1, Math.round((area / perPlantM2) * Math.min(1.4, householdFactor)));
+    const plants = Math.max(1, Math.round((area / perPlantM2) * Math.min(1.4, householdFactor)));
     const seeds = Math.ceil(plants * crop.seedFactor);
     const packets = Math.max(1, Math.ceil(seeds / crop.packetSeeds));
     return {
@@ -199,8 +199,8 @@ function buildBedPlan(input: PlannerInput, crops: CropPlan[], growingAreaM2: num
 
   const orientation =
     input.hemisphere === "north"
-      ? "Run the beds north to south so the sun travels along them and tall plants at the north end never shade the rest. Put beans and greenhouse crops on the north side of the plot."
-      : "Run the beds north to south, and keep the tall crops (beans) on the south side of the plot so they don't shade everything else.";
+      ? "Run the beds north to south so the sun travels along them and tall plants at the north end never shade the rest. Put beans, sweetcorn and greenhouse crops on the north side of the plot."
+      : "Run the beds north to south, and keep the tall crops (beans, sweetcorn) on the south side of the plot so they don't shade everything else.";
 
   const digHoursPerM2 = input.experience === "none" ? 1.6 : input.experience === "some" ? 1.2 : 0.9;
   const steps = [
