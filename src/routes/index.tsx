@@ -280,11 +280,11 @@ function Index() {
               <div className="mt-4 flex items-center gap-4">
                 <span className="w-20 text-xs text-muted-foreground">Raised</span>
                 <Slider
-                  value={[100 - raisedPct]}
+                  value={[raisedPct]}
                   min={0}
                   max={100}
                   step={5}
-                  onValueChange={(v) => setRaisedPct(100 - (v[0] ?? 40))}
+                  onValueChange={(v) => setRaisedPct(v[0] ?? 60)}
                   className="flex-1"
                 />
                 <span className="w-20 text-right text-xs text-muted-foreground">In-ground</span>
