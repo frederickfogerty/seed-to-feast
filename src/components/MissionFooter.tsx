@@ -38,9 +38,9 @@ export function MissionFooter() {
               href={COFFEE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 text-base font-semibold text-accent-foreground shadow-sm transition-transform hover:-translate-y-0.5 hover:opacity-95"
             >
-              <Coffee className="h-4 w-4" />
+              <Coffee className="h-5 w-5" />
               Buy me a coffee
             </a>
             <p className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground sm:justify-end">
