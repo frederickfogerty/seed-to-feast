@@ -1,5 +1,5 @@
-import { Coffee, Heart, Sprout } from "lucide-react";
-import { ShieldAlert } from "lucide-react";
+import { Coffee, Heart, ShieldAlert, Sprout } from "lucide-react";
+
 
 
 const COFFEE_URL = "https://buymeacoffee.com/celticpermaculture";
