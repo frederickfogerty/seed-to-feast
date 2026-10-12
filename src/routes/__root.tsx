@@ -80,12 +80,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Plot & Plan — your personal kitchen garden plan" },
+      { title: "Seed to Table — your personal kitchen garden plan" },
       {
         name: "description",
         content: "Turn your space, tastes and experience into a complete year of growing.",
       },
-      { property: "og:title", content: "Plot & Plan" },
+      { property: "og:title", content: "Seed to Table" },
       {
         property: "og:description",
         content: "Turn your space, tastes and experience into a complete year of growing.",
