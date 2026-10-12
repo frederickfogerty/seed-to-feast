@@ -278,16 +278,16 @@ function Index() {
                 to set up. Slide to mix the two.
               </p>
               <div className="mt-4 flex items-center gap-4">
-                <span className="w-20 text-xs text-muted-foreground">In-ground</span>
+                <span className="w-20 text-xs text-muted-foreground">Raised</span>
                 <Slider
-                  value={[raisedPct]}
+                  value={[100 - raisedPct]}
                   min={0}
                   max={100}
                   step={5}
-                  onValueChange={(v) => setRaisedPct(v[0] ?? 60)}
+                  onValueChange={(v) => setRaisedPct(100 - (v[0] ?? 40))}
                   className="flex-1"
                 />
-                <span className="w-20 text-right text-xs text-muted-foreground">Raised</span>
+                <span className="w-20 text-right text-xs text-muted-foreground">In-ground</span>
               </div>
               <p className="mt-2 text-sm">
                 <span className="font-display text-xl">{raisedPct}%</span> raised beds ·{" "}
