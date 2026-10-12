@@ -14,7 +14,7 @@ export function MissionFooter() {
               Why this exists
             </p>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Seed to Table is brought to you by{" "}
+              Seed to Feast is brought to you by{" "}
               <a
                 href={SITE_URL}
                 target="_blank"

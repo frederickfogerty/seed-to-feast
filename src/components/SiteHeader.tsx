@@ -8,7 +8,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <span className="flex items-center gap-2 font-display text-lg">
           <Sprout className="h-5 w-5 text-primary" />
-          Seed to Table
+          Seed to Feast
         </span>
         <a
           href={COFFEE_URL}
