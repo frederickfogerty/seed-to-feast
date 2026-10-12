@@ -20,13 +20,13 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Plot & Plan — a year of growing, planned for your garden" },
+      { title: "Seed to Table — a year of growing, planned for your garden" },
       {
         name: "description",
         content:
           "Tell us your space, tastes, location and experience and get crops, seed quantities, bed-building instructions and a week-by-week growing calendar.",
       },
-      { property: "og:title", content: "Plot & Plan — your kitchen garden, planned" },
+      { property: "og:title", content: "Seed to Table — your kitchen garden, planned" },
       {
         property: "og:description",
         content:
@@ -120,7 +120,7 @@ function Index() {
     <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <div className="mb-10 text-center">
         <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-primary">
-          <Sprout className="h-3.5 w-3.5" /> Plot &amp; Plan
+          <Sprout className="h-3.5 w-3.5" /> Seed to Table
         </span>
         <h1 className="mt-4 text-4xl sm:text-5xl">Grow a year's worth of food</h1>
         <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
