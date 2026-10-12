@@ -4,7 +4,7 @@ const COFFEE_URL = "https://buymeacoffee.com/celticpermaculture";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <span className="flex items-center gap-2 font-display text-lg">
           <Sprout className="h-5 w-5 text-primary" />
