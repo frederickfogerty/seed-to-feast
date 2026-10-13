@@ -13,6 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate, tasksByWeek, type GardenPlan } from "@/lib/plan";
+import { AccuracyNote } from "@/components/AccuracyNote";
 
 function Section({
   icon,
@@ -269,6 +270,8 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
             ))}
         </div>
       </Section>
+
+      <AccuracyNote bordered={false} className="paper rounded-xl p-6 sm:p-8" />
     </div>
   );
 }
