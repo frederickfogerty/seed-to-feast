@@ -83,10 +83,11 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
   const visibleWeeks = showAllWeeks ? weeks : weeks.slice(0, 12);
 
   const downloadCsv = () => {
-    const rows = [["Date", "Action", "Time"]];
+    const rows = [["Date", "Step", "Action", "Estimate Duration"]];
+    const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
     for (const w of weeks)
       for (const t of w.tasks)
-        rows.push([w.date.toISOString().slice(0, 10), `${t.kind}: ${t.text}`, taskTime(t)]);
+        rows.push([w.date.toISOString().slice(0, 10), cap(t.kind), t.text, taskTime(t)]);
     const csv = rows.map((r) => r.map(csvCell).join(",")).join("\r\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -259,6 +260,17 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
               )}
             </div>
           ))}
+        </div>
+        <div className="hidden print:block">
+          <AccuracyNote className="mt-8" />
+          <a
+            href="https://buymeacoffee.com/celticpermaculture"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-block rounded-lg border border-border px-4 py-2 text-sm font-semibold"
+          >
+            ☕ Buy me a coffee — buymeacoffee.com/celticpermaculture
+          </a>
         </div>
       </Section>
 
