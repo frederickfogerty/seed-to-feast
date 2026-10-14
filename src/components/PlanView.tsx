@@ -9,6 +9,8 @@ import {
   Leaf,
   Sun,
   Snowflake,
+  Printer,
+  Download,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,24 +22,51 @@ function Section({
   title,
   subtitle,
   children,
+  id,
+  action,
 }: {
   icon: React.ReactNode;
   title: string;
   subtitle?: string;
   children: React.ReactNode;
+  id?: string;
+  action?: React.ReactNode;
 }) {
   return (
-    <section className="paper rounded-xl p-6 sm:p-8">
+    <section id={id} className="paper rounded-xl p-6 sm:p-8">
       <div className="mb-5 flex items-start gap-3">
         <span className="mt-0.5 text-primary">{icon}</span>
-        <div>
+        <div className="flex-1">
           <h2 className="text-2xl">{title}</h2>
           {subtitle ? <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p> : null}
         </div>
+        {action ? <div className="no-print">{action}</div> : null}
       </div>
       {children}
     </section>
   );
+}
+
+const KIND_MINUTES: Record<string, number> = { prep: 60, sow: 15, plant: 30, care: 15, harvest: 20 };
+
+function taskTime(t: { kind: string; text: string }) {
+  const m = t.text.match(/— ([\d.]+) h$/);
+  if (m) return `${m[1]} h`;
+  return `${KIND_MINUTES[t.kind] ?? 15} min`;
+}
+
+function csvCell(v: string) {
+  return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
+}
+
+function printSeasons() {
+  document.body.classList.add("print-seasons");
+  const done = () => {
+    document.body.classList.remove("print-seasons");
+    window.removeEventListener("afterprint", done);
+  };
+  window.addEventListener("afterprint", done);
+  window.print();
 }
 
 const KIND_STYLE: Record<string, string> = {
@@ -52,6 +81,23 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
   const weeks = useMemo(() => tasksByWeek(plan.tasks), [plan]);
   const [showAllWeeks, setShowAllWeeks] = useState(false);
   const visibleWeeks = showAllWeeks ? weeks : weeks.slice(0, 12);
+
+  const downloadCsv = () => {
+    const rows = [["Date", "Action", "Time"]];
+    for (const w of weeks)
+      for (const t of w.tasks)
+        rows.push([w.date.toISOString().slice(0, 10), `${t.kind}: ${t.text}`, taskTime(t)]);
+    const csv = rows.map((r) => r.map(csvCell).join(",")).join("\r\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "seed-to-feast-week-by-week.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  };
 
   const seedTotal = plan.crops.reduce((a, c) => a + c.seeds, 0);
 
@@ -182,6 +228,12 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
         icon={<Sun className="h-6 w-6" />}
         title="Season by season"
         subtitle="The shape of the year at a glance."
+        id="season-plan"
+        action={
+          <Button variant="outline" size="sm" onClick={printSeasons}>
+            <Printer className="h-4 w-4" /> Print / PDF
+          </Button>
+        }
       >
         <div className="grid gap-4 md:grid-cols-2">
           {plan.seasons.map((s) => (
@@ -214,6 +266,11 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
         icon={<CalendarDays className="h-6 w-6" />}
         title="Week by week"
         subtitle="Do these jobs in the week shown and everything else takes care of itself."
+        action={
+          <Button variant="outline" size="sm" onClick={downloadCsv}>
+            <Download className="h-4 w-4" /> Download CSV
+          </Button>
+        }
       >
         <ol className="space-y-3">
           {visibleWeeks.map((w) => (
