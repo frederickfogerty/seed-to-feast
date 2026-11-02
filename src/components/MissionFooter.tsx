@@ -1,9 +1,9 @@
-import { Coffee, Heart, Sprout } from "lucide-react";
+import { HeartHandshake, Heart, Sprout } from "lucide-react";
 import { AccuracyNote } from "./AccuracyNote";
 
 
 
-const COFFEE_URL = "https://buymeacoffee.com/celticpermaculture";
+const DONATE_URL = "https://donate.stripe.com/aFadR9eyjcYTfLZeru3gk00";
 const SITE_URL = "https://celticpermaculture.ie/";
 
 export function MissionFooter() {
@@ -33,17 +33,17 @@ export function MissionFooter() {
 
           <div className="shrink-0 sm:text-right">
             <a
-              href={COFFEE_URL}
+              href={DONATE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 text-base font-semibold text-accent-foreground shadow-sm transition-transform hover:-translate-y-0.5 hover:opacity-95"
             >
-              <Coffee className="h-5 w-5" />
-              Buy me a coffee
+              <HeartHandshake className="h-5 w-5" />
+              Please donate using Stripe
             </a>
             <p className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground sm:justify-end">
               <Heart className="h-3 w-3 text-accent" />
-              Every cup keeps the plan growing
+              Every donation keeps the plan growing
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
-import { Coffee, Sprout } from "lucide-react";
+import { HeartHandshake, Sprout } from "lucide-react";
 
-const COFFEE_URL = "https://buymeacoffee.com/celticpermaculture";
+const DONATE_URL = "https://donate.stripe.com/aFadR9eyjcYTfLZeru3gk00";
 
 export function SiteHeader() {
   return (
@@ -11,13 +11,13 @@ export function SiteHeader() {
           Seed to Feast
         </span>
         <a
-          href={COFFEE_URL}
+          href={DONATE_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-sm transition-transform hover:-translate-y-0.5 hover:opacity-95"
+          className="inline-flex items-center gap-2 whitespace-nowrap rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-sm transition-transform hover:-translate-y-0.5 hover:opacity-95"
         >
-          <Coffee className="h-4 w-4" />
-          Buy me a coffee
+          <HeartHandshake className="h-4 w-4" />
+          Please donate using Stripe
         </a>
       </div>
     </header>

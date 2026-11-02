@@ -297,12 +297,12 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
         <div className="hidden print:block">
           <AccuracyNote className="mt-8" />
           <a
-            href="https://buymeacoffee.com/celticpermaculture"
+            href="https://donate.stripe.com/aFadR9eyjcYTfLZeru3gk00"
             target="_blank"
             rel="noreferrer"
             className="mt-4 inline-block rounded-lg border border-border px-4 py-2 text-sm font-semibold"
           >
-            ☕ Buy me a coffee — buymeacoffee.com/celticpermaculture
+            Please donate using Stripe — donate.stripe.com/aFadR9eyjcYTfLZeru3gk00
           </a>
         </div>
       </Section>
