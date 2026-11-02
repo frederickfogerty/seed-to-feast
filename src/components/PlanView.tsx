@@ -16,6 +16,39 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate, tasksByWeek, type GardenPlan } from "@/lib/plan";
 import { AccuracyNote } from "@/components/AccuracyNote";
+import { pickPerennials } from "@/lib/perennials";
+import { TreeDeciduous } from "lucide-react";
+
+function PerennialSection({ plan }: { plan: GardenPlan }) {
+  const { patchM2, picks } = useMemo(() => pickPerennials(plan.input), [plan.input]);
+  if (!picks.length) return null;
+  return (
+    <Section
+      icon={<TreeDeciduous className="h-6 w-6" />}
+      title="Perennials"
+      subtitle={`Plant once, pick for years. Set aside a permanent bed of about ${patchM2} m², away from your rotation beds.`}
+    >
+      <div className="grid gap-3 sm:grid-cols-2">
+        {picks.map((p) => (
+          <div key={p.id} className="rounded-lg border border-border p-4">
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="font-medium">{p.name}</span>
+              <Badge variant="secondary">{p.kind}</Badge>
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {p.plants} plant{p.plants > 1 ? "s" : ""} · {p.spacingCm} cm apart · ~{p.areaM2} m²
+            </p>
+            <p className="mt-2 text-sm">
+              <strong>Plant:</strong> {p.plantWhen} · <strong>First crop:</strong> {p.firstHarvest} ·{" "}
+              <strong>Pick:</strong> {p.harvestWhen} · <strong>Lasts:</strong> {p.lifespan}
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">{p.tip}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
 
 function Section({
   icon,
@@ -339,6 +372,8 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
             ))}
         </div>
       </Section>
+
+      <PerennialSection plan={plan} />
 
       <AccuracyNote bordered={false} className="paper rounded-xl p-6 sm:p-8" />
     </div>
