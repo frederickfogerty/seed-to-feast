@@ -29,11 +29,6 @@ export function MissionFooter() {
               . It has one purpose: to help you grow food for yourself, your family and your
               friends.
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              It runs on Lovable&apos;s free tier, so the credits can run out mid-day. If the app
-              ever stops answering, just try again the next morning. If the coffee fund brings in
-              enough, I&apos;ll buy a subscription so it can keep working for more people.
-            </p>
           </div>
 
           <div className="shrink-0 sm:text-right">
