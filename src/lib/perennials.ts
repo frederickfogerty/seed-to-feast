@@ -40,6 +40,7 @@ export interface PerennialPick extends Perennial {
 
 /** Roughly 15% of the plot goes to a permanent bed for perennials. */
 export function pickPerennials(input: PlannerInput): { patchM2: number; picks: PerennialPick[] } {
+  if (!input.categories.includes("perennial")) return { patchM2: 0, picks: [] };
   const patchM2 = Math.max(1, Math.round(input.spaceM2 * 0.15 * 10) / 10);
   const pool = PERENNIALS.filter(
     (p) =>

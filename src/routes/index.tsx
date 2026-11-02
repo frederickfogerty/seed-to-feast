@@ -8,6 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { PlanView } from "@/components/PlanView";
 import { CATEGORY_LABELS, CROPS, type CropCategory } from "@/lib/crops";
+import { PERENNIALS } from "@/lib/perennials";
 import {
   buildPlan,
   type Climate,
@@ -178,6 +179,17 @@ function Index() {
                     {c.name}
                   </Chip>
                 ))}
+                {categories.includes("perennial") &&
+                  PERENNIALS.map((p) => (
+                    <Chip
+                      key={p.id}
+                      active={dislikes.includes(p.id)}
+                      onClick={() => toggle(dislikes, p.id, setDislikes)}
+                    >
+                      {dislikes.includes(p.id) ? "✕ " : ""}
+                      {p.name}
+                    </Chip>
+                  ))}
               </div>
             </div>
           </div>

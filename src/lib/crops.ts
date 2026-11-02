@@ -5,7 +5,8 @@ export type CropCategory =
   | "legume"
   | "brassica"
   | "allium"
-  | "herb";
+  | "herb"
+  | "perennial";
 
 export const CATEGORY_LABELS: Record<CropCategory, string> = {
   leafy: "Salads & leaves",
@@ -15,6 +16,7 @@ export const CATEGORY_LABELS: Record<CropCategory, string> = {
   brassica: "Cabbage family",
   allium: "Onions & garlic",
   herb: "Herbs",
+  perennial: "Perennials & fruit",
 };
 
 export type Fertility = "light" | "medium" | "hungry";
