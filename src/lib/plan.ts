@@ -17,6 +17,9 @@ export interface PlannerInput {
   household: number;
   /** 0–100: share of the outdoor growing area built as raised beds; the rest is in-ground. */
   raisedBedPercent: number;
+  /** Bed width in centimetres, 75–120. */
+  bedWidthCm: number;
+
 }
 
 export interface CropPlan {
@@ -195,7 +198,8 @@ export function buildPlan(input: PlannerInput, year: number): GardenPlan {
 }
 
 function buildBedPlan(input: PlannerInput, crops: CropPlan[], growingAreaM2: number): BedPlan {
-  const bedWidthM = 1.2;
+  const bedWidthM = Math.max(0.75, Math.min(1.2, (input.bedWidthCm || 75) / 100));
+
   const bedLengthM = Math.min(6, Math.max(2, Math.round((growingAreaM2 / bedWidthM / 2) * 2) / 2));
   const bedCount = Math.max(1, Math.round(growingAreaM2 / (bedWidthM * bedLengthM)));
 

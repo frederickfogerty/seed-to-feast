@@ -87,6 +87,8 @@ function Index() {
   const [experience, setExperience] = useState<Experience>("none");
   const [household, setHousehold] = useState(2);
   const [raisedPct, setRaisedPct] = useState(60);
+  const [bedWidthCm, setBedWidthCm] = useState(75);
+
 
   // ~10 m² of plot and ~2 m² of greenhouse per person
   const recPlot = Math.min(200, household * 10);
@@ -118,6 +120,8 @@ function Index() {
       experience,
       household,
       raisedBedPercent: raisedPct,
+      bedWidthCm,
+
     };
     setPlan(buildPlan(input, new Date().getUTCFullYear()));
     if (typeof window !== "undefined") window.scrollTo({ top: 0 });
@@ -350,6 +354,32 @@ function Index() {
                 <span className="font-display text-xl">{100 - raisedPct}%</span> in-ground
               </p>
             </div>
+            <div>
+              <Label className="block">How wide should the beds be?</Label>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Narrow beds you can reach the middle of while standing on the path; wide beds hold
+                more soil and crop more, but you tend them leaning in from both sides.
+              </p>
+              <div className="mt-4 flex items-center gap-4">
+                <span className="w-16 text-xs text-muted-foreground">75 cm</span>
+                <Slider
+                  value={[bedWidthCm]}
+                  min={75}
+                  max={120}
+                  step={5}
+                  onValueChange={(v) => setBedWidthCm(v[0] ?? 75)}
+                  className="flex-1"
+                />
+                <span className="w-16 text-right text-xs text-muted-foreground">1.2 m</span>
+              </div>
+              <p className="mt-2 text-sm">
+                <span className="font-display text-xl">{bedWidthCm} cm</span> wide
+                {bedWidthCm <= 90
+                  ? " — reachable from the path, without stepping on the soil"
+                  : " — tend it from both sides"}
+              </p>
+            </div>
+
           </div>
         )}
 
