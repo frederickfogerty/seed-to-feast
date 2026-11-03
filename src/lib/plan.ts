@@ -274,7 +274,7 @@ function buildBedPlan(input: PlannerInput, crops: CropPlan[], growingAreaM2: num
   ];
 
   const fertility = [
-    "Get a £10 pH test kit: most vegetables want pH 6.0–7.0. Lime only if it reads below 6.0.",
+    "Get a pH test kit: most vegetables want pH 6.0–7.0. Lime only if it reads below 6.0.",
     hungry.length
       ? `Hungry feeders (${hungry.slice(0, 4).join(", ")}) get an extra bucket of compost per square metre before planting, plus a liquid feed every 10–14 days once cropping.`
       : "Top up each bed with 5 cm of compost every autumn and you'll rarely need bagged fertiliser.",
