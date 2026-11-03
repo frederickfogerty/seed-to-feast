@@ -84,7 +84,7 @@ const KIND_MINUTES: Record<string, number> = { prep: 60, sow: 15, plant: 30, car
 
 function taskTime(t: { kind: string; text: string }) {
   const m = t.text.match(/— ([\d.]+) h$/);
-  if (m) return `${m[1]} h`;
+  if (m) return `${Math.round(parseFloat(m[1]) * 60)} min`;
   return `${KIND_MINUTES[t.kind] ?? 15} min`;
 }
 
