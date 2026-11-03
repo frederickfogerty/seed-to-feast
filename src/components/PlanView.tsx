@@ -83,8 +83,8 @@ function Section({
 const KIND_MINUTES: Record<string, number> = { prep: 60, sow: 15, plant: 30, care: 15, harvest: 20 };
 
 function taskTime(t: { kind: string; text: string }) {
-  const m = t.text.match(/— ([\d.]+) h$/);
-  if (m) return `${Math.round(parseFloat(m[1]) * 60)} min`;
+  const hours = Number(t.text.match(/— ([\d.]+) h$/)?.[1] ?? NaN);
+  if (Number.isFinite(hours)) return `${Math.round(hours * 60)} min`;
   return `${KIND_MINUTES[t.kind] ?? 15} min`;
 }
 
