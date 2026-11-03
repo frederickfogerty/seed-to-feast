@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Sprout } from "lucide-react";
+import { ArrowLeft, ArrowRight, Lightbulb, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -87,6 +87,20 @@ function Index() {
   const [experience, setExperience] = useState<Experience>("none");
   const [household, setHousehold] = useState(2);
   const [raisedPct, setRaisedPct] = useState(60);
+
+  // ~10 m² of plot and ~2 m² of greenhouse per person
+  const recPlot = Math.min(200, household * 10);
+  const recGreenhouse = Math.min(40, Math.max(2, household * 2));
+  const applyRecommendation = () => {
+    setSpaceM2(recPlot);
+    setGreenhouseM2(recGreenhouse);
+  };
+  const changeHousehold = (n: number) => {
+    setHousehold(n);
+    setSpaceM2(Math.min(200, n * 10));
+    setGreenhouseM2(Math.min(40, Math.max(2, n * 2)));
+  };
+
 
   const toggle = <T,>(list: T[], value: T, set: (v: T[]) => void) =>
     set(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
@@ -192,11 +206,41 @@ function Index() {
                   ))}
               </div>
             </div>
+            <div>
+              <h3 className="text-lg">How many people are you feeding?</h3>
+              <div className="mt-3 flex items-center gap-4">
+                <Slider
+                  value={[household]}
+                  min={1}
+                  max={8}
+                  step={1}
+                  onValueChange={(v) => changeHousehold(v[0] ?? 2)}
+                  className="flex-1"
+                />
+                <span className="w-16 text-right font-display text-2xl">
+                  {household === 8 ? "8+" : household}
+                </span>
+              </div>
+            </div>
           </div>
         )}
 
         {step === 1 && (
           <div className="space-y-8">
+            <div className="rounded-lg border border-primary/40 bg-secondary/60 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="flex items-start gap-2 text-sm">
+                  <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span>
+                    Recommended for {household} {household === 1 ? "person" : "people"}:{" "}
+                    <strong>~{recPlot} m² plot</strong> and <strong>~{recGreenhouse} m² greenhouse</strong>
+                  </span>
+                </p>
+                <Button size="sm" variant="outline" onClick={applyRecommendation}>
+                  Use recommendation
+                </Button>
+              </div>
+            </div>
             <div>
               <h2 className="text-2xl">How much ground can you give it?</h2>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -333,20 +377,6 @@ function Index() {
               <p className="mt-2 text-sm text-muted-foreground">
                 Beginners get the forgiving crops only; confident gardeners get the fussy ones too.
               </p>
-            </div>
-            <div>
-              <Label className="block">People to feed</Label>
-              <div className="mt-3 flex items-center gap-4">
-                <Slider
-                  value={[household]}
-                  min={1}
-                  max={8}
-                  step={1}
-                  onValueChange={(v) => setHousehold(v[0] ?? 2)}
-                  className="flex-1"
-                />
-                <span className="w-16 text-right font-display text-2xl">{household}</span>
-              </div>
             </div>
           </div>
         )}
