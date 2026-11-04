@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate, tasksByWeek, type GardenPlan } from "@/lib/plan";
 import { AccuracyNote } from "@/components/AccuracyNote";
+import { SupportCard } from "@/components/SupportCard";
 import { pickPerennials } from "@/lib/perennials";
 import { TreeDeciduous, ShieldCheck } from "lucide-react";
 import { PROTECTION, GENERAL_PRINCIPLES } from "@/lib/protection";
@@ -428,6 +429,8 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
       <PerennialSection plan={plan} />
 
       <ProtectionSection plan={plan} />
+
+      <SupportCard />
 
       <AccuracyNote bordered={false} className="paper rounded-xl p-6 sm:p-8" />
     </div>
