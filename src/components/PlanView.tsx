@@ -17,7 +17,9 @@ import { Button } from "@/components/ui/button";
 import { formatDate, tasksByWeek, type GardenPlan } from "@/lib/plan";
 import { AccuracyNote } from "@/components/AccuracyNote";
 import { pickPerennials } from "@/lib/perennials";
-import { TreeDeciduous } from "lucide-react";
+import { TreeDeciduous, ShieldCheck } from "lucide-react";
+import { PROTECTION, GENERAL_PRINCIPLES } from "@/lib/protection";
+import type { CropCategory } from "@/lib/crops";
 
 function PerennialSection({ plan }: { plan: GardenPlan }) {
   const { patchM2, picks } = useMemo(() => pickPerennials(plan.input), [plan.input]);
@@ -43,6 +45,56 @@ function PerennialSection({ plan }: { plan: GardenPlan }) {
               <strong>Pick:</strong> {p.harvestWhen} · <strong>Lasts:</strong> {p.lifespan}
             </p>
             <p className="mt-2 text-sm text-muted-foreground">{p.tip}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function ProtectionSection({ plan }: { plan: GardenPlan }) {
+  const families = useMemo(() => {
+    const cats = new Set<CropCategory>(plan.crops.map((c) => c.crop.category));
+    if (pickPerennials(plan.input).picks.length) cats.add("perennial");
+    return [...cats]
+      .map((cat) => ({
+        guide: PROTECTION[cat],
+        crops: plan.crops.filter((c) => c.crop.category === cat).map((c) => c.crop.name),
+      }))
+      .filter((f): f is { guide: NonNullable<typeof f.guide>; crops: string[] } => !!f.guide);
+  }, [plan]);
+  if (!families.length) return null;
+  return (
+    <Section
+      icon={<ShieldCheck className="h-6 w-6" />}
+      title="Organic protection & companion planting"
+      subtitle="Prevent problems without sprays — barriers, good timing and the right neighbours."
+    >
+      <ul className="mb-5 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+        {GENERAL_PRINCIPLES.map((p) => (
+          <li key={p}>{p}</li>
+        ))}
+      </ul>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {families.map(({ guide, crops }) => (
+          <div key={guide.family} className="rounded-lg border border-border p-4">
+            <span className="font-medium">{guide.family}</span>
+            {crops.length > 0 && (
+              <p className="mt-1 text-xs text-muted-foreground">{crops.join(", ")}</p>
+            )}
+            <div className="mt-2 flex flex-wrap gap-1">
+              {guide.pests.map((p) => (
+                <Badge key={p} variant="secondary">{p}</Badge>
+              ))}
+            </div>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
+              {guide.prevent.map((p) => (
+                <li key={p}>{p}</li>
+              ))}
+            </ul>
+            <p className="mt-3 text-sm text-muted-foreground">
+              <strong className="text-foreground">Good neighbours:</strong> {guide.companions.join(" · ")}
+            </p>
           </div>
         ))}
       </div>
@@ -374,6 +426,8 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
       </Section>
 
       <PerennialSection plan={plan} />
+
+      <ProtectionSection plan={plan} />
 
       <AccuracyNote bordered={false} className="paper rounded-xl p-6 sm:p-8" />
     </div>
