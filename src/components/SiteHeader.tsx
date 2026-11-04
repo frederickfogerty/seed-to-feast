@@ -17,7 +17,7 @@ export function SiteHeader() {
           className="inline-flex items-center gap-2 whitespace-nowrap rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-sm transition-transform hover:-translate-y-0.5 hover:opacity-95"
         >
           <HeartHandshake className="h-4 w-4" />
-          Please donate using Stripe
+          Help us
         </a>
       </div>
     </header>
