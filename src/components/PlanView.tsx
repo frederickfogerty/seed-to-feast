@@ -452,8 +452,6 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
       <ProtectionSection plan={plan} />
 
       <SupportCard />
-
-      <AccuracyNote bordered={false} className="paper rounded-xl p-6 sm:p-8" />
     </div>
   );
 }

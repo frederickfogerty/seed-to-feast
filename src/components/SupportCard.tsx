@@ -1,5 +1,6 @@
 import { HeartHandshake } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AccuracyNote } from "@/components/AccuracyNote";
 
 const DONATE_URL = "https://donate.stripe.com/aFadR9eyjcYTfLZeru3gk00";
 const SITE_URL = "https://celticpermaculture.ie/";
@@ -51,6 +52,7 @@ export function SupportCard({ className }: { className?: string }) {
           </p>
         </div>
       </div>
+      <AccuracyNote className="mt-6" />
     </section>
   );
 }
