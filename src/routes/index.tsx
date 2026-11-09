@@ -42,6 +42,8 @@ export const Route = createFileRoute("/")({
 
 const STEPS = ["Tastes", "Space", "Place", "You"] as const;
 
+const SITE_URL = "https://celticpermaculture.ie/";
+
 function Chip({
   active,
   onClick,
@@ -145,6 +147,18 @@ function Index() {
         <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
           Four quick questions and you'll get your crop list, how much seed to buy, how to build the
           beds, and what to do every week from first sowing to last harvest.
+        </p>
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+          Completely free to use, no ads, no tracking, complete anonymity. Provided by{" "}
+          <a
+            href={SITE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
+            https://celticpermaculture.ie/
+          </a>{" "}
+          so you can grow food for yourself, your family, and your community.
         </p>
       </div>
 
