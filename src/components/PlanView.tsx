@@ -186,6 +186,22 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
     setTimeout(() => URL.revokeObjectURL(url), 30000);
   };
 
+  const downloadSeedList = () => {
+    const rows = [["Crop", "Plants", "Seeds", "Sow by (from seed packet)", "Date sown"]];
+    for (const c of plan.crops)
+      rows.push([c.crop.name, `${c.plants}`, `${c.seeds}`, "", ""]);
+    const csv = rows.map((r) => r.map(csvCell).join(",")).join("\r\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "seed-to-feast-seeds-to-buy.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  };
+
   const seedTotal = plan.crops.reduce((a, c) => a + c.seeds, 0);
 
   return (
@@ -222,6 +238,11 @@ export function PlanView({ plan, onRestart }: { plan: GardenPlan; onRestart: () 
         icon={<Sprout className="h-6 w-6" />}
         title="Crops and seeds to buy"
         subtitle="Quantities are sized to your space and household, with spare seed for thinning and losses."
+        action={
+          <Button variant="outline" size="sm" onClick={downloadSeedList}>
+            <Download className="h-4 w-4" /> Download CSV
+          </Button>
+        }
       >
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] text-sm">
